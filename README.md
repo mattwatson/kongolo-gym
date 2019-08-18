@@ -1,4 +1,4 @@
-# KongoloGym
+# Kongolo Gym
 
 A [Giraffe](https://github.com/giraffe-fsharp/Giraffe) web application, which has been created via the `dotnet new giraffe` command.
 
@@ -28,4 +28,4 @@ After a successful build you can start the web application by executing the foll
 dotnet run src/KongoloGym
 ```
 
-After the application has started visit [http://localhost:5000](http://localhost:5000) in your preferred browser.#konogolo-gym
+After the application has started visit [http://localhost:5000](http://localhost:5000) in your preferred browser.
