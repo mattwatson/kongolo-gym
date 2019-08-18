@@ -11,9 +11,19 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  dockerId: mattwatson1
+  imageName: kongologym
 
 steps:
 - script: dotnet restore src/KongoloGym
   displayName: 'Restore dependencies'
 - script: dotnet build --configuration $(buildConfiguration) src/KongoloGym
   displayName: '$(buildConfiguration) build'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'DockerHub ($(dockerId))'
+    command: 'login'
+- script: docker build -t $(dockerId)/$(imageName) .
+  displayName: 'Docker Build'
+- script: docker push $(dockerId)/$(imageName)
+  displayName: 'Docker Push'
