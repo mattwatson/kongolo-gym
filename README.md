@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/mattwatsonjob/kongolo-gym/_apis/build/status/mattwatson.kongolo-gym?branchName=master)](https://dev.azure.com/mattwatsonjob/kongolo-gym/_build/latest?definitionId=1&branchName=master)
+
 # Kongolo Gym
 
 A [Giraffe](https://github.com/giraffe-fsharp/Giraffe) web application, which has been created via the `dotnet new giraffe` command.
