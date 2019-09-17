@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   dockerId: mattwatson1
   imageName: kongologym
-  tag: $(Build.BuildId)
+  tag: $(Date:yyyyMMdd)$(Rev:.r)
 
 steps:
 - script: dotnet restore src/KongoloGym
