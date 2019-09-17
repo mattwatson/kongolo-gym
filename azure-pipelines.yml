@@ -13,10 +13,6 @@ variables:
 - group: Variables
 - name: buildConfiguration
   value: 'Release'
-- name: dockerId
-  value: mattwatson1
-- name: imageName
-  value: kongologym
 
 steps:
 - script: dotnet restore src/KongoloGym
