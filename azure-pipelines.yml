@@ -23,7 +23,7 @@ steps:
   inputs:
     containerRegistry: 'DockerHub ($(dockerId))'
     command: 'login'
-- script: docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(tag).
+- script: docker build -t $(dockerId)/$(imageName):latest -t $(dockerId)/$(imageName):$(tag) .
   displayName: 'Docker Build'
 - script: docker push $(dockerId)/$(imageName):$(tag)
   displayName: 'Docker Push tag'
