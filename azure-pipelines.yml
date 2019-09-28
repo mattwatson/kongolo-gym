@@ -27,5 +27,3 @@ steps:
   displayName: 'Docker Build'
 - script: docker push $(dockerId)/$(imageName):$(tag)
   displayName: 'Docker Push tag'
-- script: docker push $(dockerId)/$(imageName):latest
-  displayName: 'Docker Push latest'
