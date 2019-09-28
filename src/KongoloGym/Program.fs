@@ -8,6 +8,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
+open Prometheus
 
 // ---------------------------------
 // Models
@@ -19,6 +20,16 @@ type Message =
     }
 
 // ---------------------------------
+// Metrics
+// ---------------------------------
+let requestCount =
+    let counterConfiguration = CounterConfiguration(LabelNames = [| "name" |])
+    Metrics.CreateCounter(
+        "kongologym_request_count",
+        "Number of requests to Kongolo Gym",
+        counterConfiguration)
+
+// --------------------ounter -------------
 // Views
 // ---------------------------------
 
@@ -53,6 +64,7 @@ let indexHandler (name : string) =
     let greetings = sprintf "Hello %s, from Kongolo!" name
     let model     = { Text = greetings }
     let view      = Views.index model
+    requestCount.WithLabels(name).Inc()
     htmlView view
 
 let webApp =
@@ -84,12 +96,17 @@ let configureCors (builder : CorsPolicyBuilder) =
 
 let configureApp (app : IApplicationBuilder) =
     let env = app.ApplicationServices.GetService<IHostingEnvironment>()
+    
+    // Configure Prometheus Metrics (This needs to be done before some of the other config)
+    let app = app.UseHttpMetrics()
+
     (match env.IsDevelopment() with
     | true  -> app.UseDeveloperExceptionPage()
     | false -> app.UseGiraffeErrorHandler errorHandler)
         .UseHttpsRedirection()
         .UseCors(configureCors)
         .UseStaticFiles()
+        .UseMetricServer()
         .UseGiraffe(webApp)
 
 let configureServices (services : IServiceCollection) =
