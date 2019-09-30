@@ -1,0 +1,16 @@
+{{- if .Values.serviceMonitor.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "kongolo-gym.fullname" . }}
+  labels:
+{{ include "kongolo-gym.labels" . | indent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "kongolo-gym.name" . }}
+
+  endpoints:
+  - path: /metrics
+    port: http
+{{- end }}

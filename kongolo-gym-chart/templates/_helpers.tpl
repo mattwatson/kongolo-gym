@@ -35,6 +35,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "kongolo-gym.labels" -}}
+app: {{ include "kongolo-gym.name" . }}
 app.kubernetes.io/name: {{ include "kongolo-gym.name" . }}
 helm.sh/chart: {{ include "kongolo-gym.chart" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
