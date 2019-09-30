@@ -61,7 +61,7 @@ module Views =
 // ---------------------------------
 
 let indexHandler (name : string) =
-    let greetings = sprintf "Hello %s, from Kongolo!" name
+    let greetings = sprintf "Hello %s, from Kongolo. Bob Smith was here!" name
     let model     = { Text = greetings }
     let view      = Views.index model
     requestCount.WithLabels(name).Inc()
