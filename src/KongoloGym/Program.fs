@@ -7,8 +7,24 @@ open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
+
 open Giraffe
 open Prometheus
+open Serilog
+open Serilog.Sinks.Elasticsearch
+
+let log =
+    // TODO Make Elasticsearch sink optional
+    let elasticOptions = ElasticsearchSinkOptions (Uri("http://elasticsearch-master:9200") )
+    elasticOptions.AutoRegisterTemplate <- true
+    elasticOptions.AutoRegisterTemplateVersion <- AutoRegisterTemplateVersion.ESv6
+    elasticOptions.BufferBaseFilename <- "./logs/buffer"
+
+    Serilog
+        .LoggerConfiguration()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(elasticOptions)
+        .CreateLogger()
 
 // ---------------------------------
 // Models
@@ -65,6 +81,7 @@ let indexHandler (name : string) =
     let model     = { Text = greetings }
     let view      = Views.index model
     requestCount.WithLabels(name).Inc()
+    log.Information("/hello called with {name}", name)
     htmlView view
 
 let webApp =
@@ -80,8 +97,9 @@ let webApp =
 // Error handler
 // ---------------------------------
 
-let errorHandler (ex : Exception) (logger : ILogger) =
-    logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
+let errorHandler (ex : Exception) (_logger : Microsoft.Extensions.Logging.ILogger) =
+    //_logger.LogError(ex, "An unhandled exception has occurred while executing the request.")
+    log.Error(ex, "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 // ---------------------------------
