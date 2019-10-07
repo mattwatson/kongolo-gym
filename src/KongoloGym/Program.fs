@@ -11,19 +11,13 @@ open Microsoft.Extensions.DependencyInjection
 open Giraffe
 open Prometheus
 open Serilog
-open Serilog.Sinks.Elasticsearch
 
 let log =
-    // TODO Make Elasticsearch sink optional
-    let elasticOptions = ElasticsearchSinkOptions (Uri("http://elasticsearch-master.logging:9200") )
-    elasticOptions.AutoRegisterTemplate <- true
-    elasticOptions.AutoRegisterTemplateVersion <- AutoRegisterTemplateVersion.ESv6
-    //elasticOptions.BufferBaseFilename <- "./logs/buffer"
+  
 
     Serilog
         .LoggerConfiguration()
         .WriteTo.Console()
-        .WriteTo.Elasticsearch(elasticOptions)
         .CreateLogger()
 
 // ---------------------------------
